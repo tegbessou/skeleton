@@ -1,3 +1,5 @@
+### PHPStorm configuration
+.idea/
 
 ###> symfony/framework-bundle ###
 /.env.local
