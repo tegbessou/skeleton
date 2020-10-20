@@ -70,7 +70,9 @@ If you add some migration or some fixtures, you have to update your dump with:
 </pre>
 ### PhpMyAdmin
 To access PhpMyAdmin use: http://127.0.0.1:8080
+
 Login: root
+
 Password: root
 
 ## Quality of our code
