@@ -16,7 +16,7 @@ up: build ##Up docker
 	$(DOCKER-COMPOSE) up -d
 
 down: ##Down docker
-	$(DOCKER-COMPOSE) down
+	$(DOCKER-COMPOSE) down --remove-orphans
 
 ##Project
 start: up ##Start project
@@ -35,6 +35,7 @@ composer-update: composer.json ##Update composer
 
 cc: ##Clear symfony cache
 	$(EXEC_SYMFONY) c:c
+	$(EXEC_SYMFONY) cache:pool:clear cache.global_clearer
 
 wait-db:
 	@$(EXEC_PHP) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',3306))die;echo \"Waiting for DB\n\";sleep(1);}"
