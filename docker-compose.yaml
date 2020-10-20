@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:1.19
     volumes:
       - .:/home/app
       - ./docker/nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
@@ -18,7 +18,7 @@ services:
       - .:/home/app
 
   db:
-    image: mysql
+    image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     volumes:

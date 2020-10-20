@@ -5,7 +5,7 @@ EXEC_DB = docker-compose exec db sh -c
 QUALITY_ASSURANCE = docker-compose run --rm quality-assurance
 COMPOSER = $(EXEC_PHP) composer
 
-help: ## Outputs this help screen
+help: ##Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 ##Docker
@@ -23,7 +23,7 @@ start: up ##Start project
 
 stop: down ##Stop project
 
-install: up db-load ## Up the project and load database
+install: up db-load ##Up the project and load database
 
 reset: stop start db-load ##Reset the project
 
@@ -68,7 +68,7 @@ behat: db-load ##Launch behat
 	$(EXEC_PHP) vendor/bin/behat
 
 ##Quality assurance
-quality-ci: security-checker phpmd composer-unused yaml-linter phpstan cs db-validate
+quality-ci: security-checker phpmd composer-unused yaml-linter phpstan cs db-validate ##Launch all quality assurance step
 security-checker: ##Security check on dependencies
 	$(QUALITY_ASSURANCE) sh -c "security-checker security:check"
 
@@ -81,14 +81,14 @@ composer-unused: ##Check if you have unused dependencies
 yaml-linter: ##Linter yaml
 	$(QUALITY_ASSURANCE) yaml-linter . --format=json
 
-phpstan:
+phpstan: ##PHPStan with higher level
 	$(QUALITY_ASSURANCE) phpstan analyse src/ --level 8
 
-cs:
+cs: ##Show cs fixer error
 	$(QUALITY_ASSURANCE) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff
 
-cs-fix:
+cs-fix: ##Fix cs fixer error
 	$(QUALITY_ASSURANCE) php-cs-fixer fix --using-cache=no --verbose --diff
 
-db-validate:
+db-validate: ##Validate db schema
 	$(EXEC_SYMFONY) doctrine:schema:validate
