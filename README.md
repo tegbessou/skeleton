@@ -12,6 +12,8 @@ In our skeleton we want a stack which is capable to run a Symfony application
 - PHP: 7.4
 - Mysql: 8.0
 - QualityAssurance: 7.4
+- Redis: 6.0
+- Mailcatcher
 - PhpMyAdmin
 
 ### Symfony
@@ -120,6 +122,10 @@ This Symfony command check if your database schema is coherent with your entitie
 <pre>
   make db-validate
 </pre>
+
+## Mailcatcher
+If your local app send mail, your mail will be catched by the mailcatcher.
+To see this mail go to: http://127.0.0.1:1080
 
 ## Next step
 If you want to help use, you can add some features like:
