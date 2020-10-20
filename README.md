@@ -12,7 +12,7 @@ In our skeleton we want a stack which is capable to run a Symfony application
 - PHP: 7.4
 - Mysql: 8.0
 - QualityAssurance: 7.4
-- Adminer
+- PhpMyAdmin
 
 ### Symfony
 Version 5.1
@@ -68,6 +68,10 @@ If you add some migration or some fixtures, you have to update your dump with:
 <pre>
    make db-relaod-fixtures
 </pre>
+### PhpMyAdmin
+To access PhpMyAdmin use: http://127.0.0.1:8080
+Login: root
+Password: root
 
 ## Quality of our code
 We have some quality tools and to run all this tools, you can use:
