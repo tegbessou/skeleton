@@ -11,6 +11,13 @@ RUN apk update \
 RUN docker-php-ext-install opcache pdo_mysql mysqli
 RUN docker-php-ext-enable opcache
 
+RUN docker-php-source extract \
+    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/3.0.0.tar.gz \
+    && tar xfz /tmp/redis.tar.gz \
+    && rm -r /tmp/redis.tar.gz \
+    && mv phpredis-3.0.0 /usr/src/php/ext/redis \
+    && docker-php-ext-install redis
+
 RUN apk add --update icu-dev \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install intl
