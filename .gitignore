@@ -1,13 +1,12 @@
-### PHPStorm configuration
-.idea/
-
+### PHPStorm
+/.idea
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/src/preload.php
+/src/.preload.php
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
@@ -17,3 +16,7 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+###> friends-of-behat/symfony-extension ###
+/behat.yml
+###< friends-of-behat/symfony-extension ###

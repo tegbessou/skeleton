@@ -1,0 +1,16 @@
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\FixtureContext
+                - Behat\MinkExtension\Context\MinkContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: tests/bootstrap.php
+        Behat\MinkExtension:
+            base_url: "https://skeleton.fr/"
+            default_session: symfony
+            sessions:
+                symfony:
+                    symfony: ~

@@ -1,0 +1,10 @@
+App\Entity\User:
+  user_1:
+    email: 'user1@skeleton.com'
+    password: 'skeleton'
+    roles: ['ROLE_USER']
+
+  user_2:
+    email: 'user2@skeleton.com'
+    password: 'skeleton'
+    roles: ['ROLE_ADMIN']
