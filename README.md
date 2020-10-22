@@ -68,7 +68,7 @@ We used a dump to reload faster our database. To load your database use:
 ### Update dump
 If you add some migration or some fixtures, you have to update your dump with:
 <pre>
-   make db-relaod-fixtures
+   make db-reload-fixtures
 </pre>
 ### PhpMyAdmin
 To access PhpMyAdmin use: http://127.0.0.1:8080
