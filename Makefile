@@ -1,95 +1,136 @@
-DOCKER-COMPOSE = docker-compose
-EXEC_PHP = docker-compose exec -u www-data php
-EXEC_SYMFONY = docker-compose exec -u www-data php bin/console
-EXEC_DB = docker-compose exec db sh -c
-QUALITY_ASSURANCE = docker-compose run --rm quality-assurance
+DOCKER_COMPOSE = docker-compose
+EXEC_PHP = $(DOCKER_COMPOSE) exec -T -u www-data php
+EXEC_SYMFONY = $(DOCKER_COMPOSE) exec -T -u www-data php bin/console
+EXEC_DB = $(DOCKER_COMPOSE) exec -T db sh -c
+QUALITY_ASSURANCE = $(DOCKER_COMPOSE) run --rm quality-assurance
 COMPOSER = $(EXEC_PHP) composer
+
+.DEFAULT_GOAL := help
 
 help: ##Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 ##Docker
-build: ##Build docker
-	$(DOCKER-COMPOSE) build
+pull:
+	@echo "\nPulling local images...\e[0m"
+	@$(DOCKER_COMPOSE) pull --quiet
 
-up: build ##Up docker
-	$(DOCKER-COMPOSE) up -d
+build: ##Build docker
+	@echo "\nBuilding local images...\e[0m"
+	@$(DOCKER_COMPOSE) build
+
+up: ##Up docker
+	@$(DOCKER_COMPOSE) up -d --remove-orphans
 
 down: ##Down docker
-	$(DOCKER-COMPOSE) down --remove-orphans
+	@$(DOCKER_COMPOSE) kill
+	@$(DOCKER_COMPOSE) down --remove-orphans
+
+logs: ##Logs from docker
+	@${DOCKER_COMPOSE} logs -f --tail 0
+
+.PHONY: pull build up down logs
 
 ##Project
-start: up ##Start project
+install: build up vendor db-load-fixtures ##Up the project and load database
 
-stop: down ##Stop project
+reset: down build up db-load-fixtures ##Reset the project
 
-install: up db-load ##Up the project and load database
+start: ## Start containers (unpause)
+	@$(DOCKER_COMPOSE) unpause || true
+	@$(DOCKER_COMPOSE) start || true
 
-reset: stop start db-load ##Reset the project
+stop: ##Stop containers (pause)
+	@$(DOCKER_COMPOSE) pause || true
 
-composer-install: composer.lock ##Install composer
-	$(COMPOSER) install
+vendor: composer.lock ##Install composer
+	@echo "\nInstalling composer packages...\e[0m"
+	@$(COMPOSER) install
 
 composer-update: composer.json ##Update composer
-	$(COMPOSER) update
+	@echo "\nUpdating composer packages...\e[0m"
+	@$(COMPOSER) update
 
 cc: ##Clear symfony cache
-	$(EXEC_SYMFONY) c:c
-	$(EXEC_SYMFONY) cache:pool:clear cache.global_clearer
+	@echo "\nClearing cache...\e[0m"
+	@$(EXEC_SYMFONY) c:c
+	@$(EXEC_SYMFONY) cache:pool:clear cache.global_clearer
 
 wait-db:
-	@$(EXEC_PHP) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',3306))die;echo \"Waiting for DB\n\";sleep(1);}"
+	@echo "\nWaiting for DB...\e[0m"
+	@$(EXEC_PHP) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',3306))die;echo \"\";sleep(1);}"
+
+.PHONY: install reset start stop vendor composer-update cc wait-db
 
 ##Database
-db-load: wait-db db-fixtures ##Load database from dump
+db-load-fixtures: wait-db ##Load database from dump
+	@echo "\nLoading fixtures from dump...\e[0m"
+	@$(EXEC_DB) "mysql --user=root --password=root < /home/app/dump/skeleton.sql"
 
-db-reload: wait-db db-drop db-create db-migrate ##Recreate database structure
+db-reload-schema: wait-db db-drop db-create db-migrate ##Recreate database structure
 
-db-create: ##Create database
-	$(EXEC_SYMFONY) doctrine:database:create
+db-create: wait-db ##Create database
+	@echo "\nCreating database...\e[0m"
+	@$(EXEC_SYMFONY) doctrine:database:create --if-not-exists
 
-db-drop: ##Drop database
-	$(EXEC_SYMFONY) doctrine:database:drop --force --if-exists
+db-drop: wait-db ##Drop database
+	@echo "\nDropping database...\e[0m"
+	@$(EXEC_SYMFONY) doctrine:database:drop --force --if-exists
 
-db-diff: ##Generate migration by diff
-	$(EXEC_SYMFONY) doctrine:migration:diff
+db-diff: wait-db ##Generate migration by diff
+	$(EXEC_SYMFONY) doctrine:migration:diff --formatted --allow-empty-diff
 
-db-migrate: ##Load migration
-	$(EXEC_SYMFONY) doctrine:migration:migrate --no-interaction
+db-migrate: wait-db ##Load migration
+	@echo "\nRunning migrations...\e[0m"
+	@$(EXEC_SYMFONY) doctrine:migration:migrate --no-interaction --all-or-nothing
 
-db-reload-fixtures: db-reload ##Reload fixtures
-	$(EXEC_SYMFONY) hautelook:fixtures:load --no-interaction
-	$(EXEC_DB) "mysqldump --user=root --password=root --databases skeleton > /home/app/docker/db/dump/skeleton.sql"
+db-reload-fixtures: wait-db db-reload-schema ##Reload fixtures
+	@echo "\nLoading fixtures from fixtures files...\e[0m"
+	@$(EXEC_SYMFONY) hautelook:fixtures:load --no-interaction
 
-db-fixtures: ##Load fixtures from dump
-	$(EXEC_DB) "mysql --user=root --password=root < /home/app/docker/db/dump/skeleton.sql"
+	@echo "\nCreating dump...\e[0m"
+	@$(EXEC_DB) "mysqldump --user=root --password=root --databases skeleton > /home/app/dump/skeleton.sql"
 
 ##Behat
-behat: db-load ##Launch behat
-	$(EXEC_PHP) vendor/bin/behat
+behat: db-load-fixtures ##Launch behat
+	@echo "\nLaunching read-only behat tests...\e[0m"
+	@$(EXEC_PHP) vendor/bin/behat --strict --format=progress --tags="@read-only"
+
+	@echo "\nLaunching other behat tests...\e[0m"
+	@$(EXEC_PHP) vendor/bin/behat --strict --format=progress --tags="~@read-only"
 
 ##Quality assurance
-quality-ci: security-checker phpmd composer-unused yaml-linter phpstan cs db-validate ##Launch all quality assurance step
+code-quality: security-checker phpmd composer-unused yaml-linter phpstan cs db-validate ##Launch all quality assurance step
 security-checker: ##Security check on dependencies
-	$(QUALITY_ASSURANCE) sh -c "security-checker security:check"
+	@echo "\nRunning security checker...\e[0m"
+	@$(QUALITY_ASSURANCE) sh -c "security-checker security:check"
 
 phpmd: ##Phpmd
-	$(QUALITY_ASSURANCE) phpmd src/ text .phpmd.xml
+	@echo "\nRunning phpmd...\e[0m"
+	@$(QUALITY_ASSURANCE) phpmd src/ text .phpmd.xml
 
 composer-unused: ##Check if you have unused dependencies
-	$(QUALITY_ASSURANCE) composer-unused
+	@echo "\nRunning composer unused...\e[0m"
+	@$(QUALITY_ASSURANCE) composer-unused
 
 yaml-linter: ##Linter yaml
-	$(QUALITY_ASSURANCE) yaml-linter . --format=json
+	@echo "\nRunning yaml linter...\e[0m"
+	@$(QUALITY_ASSURANCE) yaml-linter . --format=json
 
 phpstan: ##PHPStan with higher level
-	$(QUALITY_ASSURANCE) phpstan analyse src/ --level 8
+	@echo "\nRunning phpstan...\e[0m"
+	@$(QUALITY_ASSURANCE) phpstan analyse src/ --level 8
 
 cs: ##Show cs fixer error
-	$(QUALITY_ASSURANCE) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff
+	@echo "\nRunning cs fixer in dry run...\e[0m"
+	@$(QUALITY_ASSURANCE) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff
 
 cs-fix: ##Fix cs fixer error
-	$(QUALITY_ASSURANCE) php-cs-fixer fix --using-cache=no --verbose --diff
+	@echo "\nRunning cs fixer...\e[0m"
+	@$(QUALITY_ASSURANCE) php-cs-fixer fix --using-cache=no --verbose --diff
 
 db-validate: ##Validate db schema
-	$(EXEC_SYMFONY) doctrine:schema:validate
+	@echo "\nRunning db validate...\e[0m"
+	@$(EXEC_SYMFONY) doctrine:schema:validate
+
+.PHONY: behat

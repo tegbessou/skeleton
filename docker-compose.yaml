@@ -3,6 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:1.19
+    restart: on-failure
     volumes:
       - .:/home/app
       - ./docker/nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
@@ -13,6 +14,7 @@ services:
 
   php:
     build: docker/php
+    restart: on-failure
     working_dir: /home/app
     volumes:
       - .:/home/app
@@ -20,7 +22,7 @@ services:
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: on-failure
     volumes:
       - .:/home/app
     environment:

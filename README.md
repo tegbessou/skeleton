@@ -38,7 +38,7 @@ To see all usefull command run:
 </pre>
 
 ## How to start with Skeleton ?
-### First replace "skeletton" occurence with your project name
+### First replace "skeleton" occurence with your project name
 - Change all occurences of "skeleton" in Makefile
 - Change host "skeleton.fr" in site.conf
 - Change "skeleton" in .bashrc
@@ -55,15 +55,25 @@ To see all usefull command run:
   127.0.0.1 your-host.fr
 </pre>
 
-### Run the project
+### Install the project
 <pre>
   make install
 </pre>
 
+### Work with project
+If you have already install the project and you want to switch to another project or stop for today,
+just stop your project:
+<pre>
+  make stop
+</pre>
+And start when you need with:
+<pre>
+  make start
+</pre>
 ## Database management
 We used a dump to reload faster our database. To load your database use:
 <pre>
-  make db-load
+  make db-load-fixtures
 </pre>
 ### Update dump
 If you add some migration or some fixtures, you have to update your dump with:
@@ -80,7 +90,7 @@ Password: root
 ## Quality of our code
 We have some quality tools and to run all this tools, you can use:
 <pre>
-  make quality-ci
+  make code-quality
 </pre>
 In our quality tools you can find:
 ### Security checker of symfony
