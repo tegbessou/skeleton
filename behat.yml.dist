@@ -9,8 +9,12 @@ default:
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/bootstrap.php
         Behat\MinkExtension:
-            base_url: "https://skeleton.docker/"
-            default_session: symfony
+            base_url: https://skeleton.docker/
+            default_session: default
             sessions:
-                symfony:
+                default:
                     symfony: ~
+                javascript:
+                    selenium2:
+                        wd_host: http://selenium:4444/wd/hub
+                        browser: chrome

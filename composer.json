@@ -4,6 +4,7 @@
     "require": {
         "php": ">=7.2.5",
         "ext-iconv": "*",
+        "behat/mink-selenium2-driver": "^1.4",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.1",

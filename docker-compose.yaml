@@ -6,6 +6,8 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./docker/nginx-proxy/cert/:/etc/nginx/certs/
+    networks:
+      - web
 
   nginx:
     image: nginx:1.19
@@ -15,6 +17,8 @@ services:
       - ./docker/nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
     links:
       - php
+    networks:
+      - web
 
   php:
     build: docker/php
@@ -22,6 +26,8 @@ services:
     working_dir: /home/app
     volumes:
       - .:/home/app
+    networks:
+      - web
 
   db:
     image: mysql:8.0
@@ -31,6 +37,8 @@ services:
       - .:/home/app
     environment:
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - web
 
   phpmyadmin:
     depends_on:
@@ -40,16 +48,32 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - web
 
   redis:
     image: redis:6.0-alpine
+    networks:
+      - web
 
   smtp:
     image: schickling/mailcatcher
     environment:
       VIRTUAL_PORT: 1080
+    networks:
+      - web
+
+  selenium:
+    image: selenium/standalone-chrome-debug:3.13.0
+    networks:
+      - web
+    external_links:
+      - nginx-proxy:skeleton.docker
 
   quality-assurance:
     build: docker/quality-assurance
     volumes:
       - .:/project
+
+networks:
+    web:

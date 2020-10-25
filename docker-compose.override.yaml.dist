@@ -20,3 +20,8 @@ services:
     environment:
       VIRTUAL_HOST: mailcatcher.skeleton.docker
       CERT_NAME: default
+
+  selenium:
+    ports:
+      - 4444:4444
+      - 5900:5900
