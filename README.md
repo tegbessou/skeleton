@@ -38,13 +38,14 @@ To see all usefull command run:
 </pre>
 
 ## How to start with Skeleton ?
-### First replace "skeletton" occurence with your project name
+### First replace "skeleton" occurence with your project name
 - Change all occurences of "skeleton" in Makefile
-- Change host "skeleton.fr" in site.conf
+- Change host "skeleton.docker" in site.conf
 - Change "skeleton" in .bashrc
-- Change base url "https://skeleton.fr" in behat.yml
+- Change base url "https://skeleton.docker" in behat.yml.dist
 - Change database name "skeleton" in .env
 - Change dump name "skeleton.sql" in FixtureContext
+- Change urls which finish with "skeleton.docker" in docker-compose.override.yaml.dist
 
 ### Add host in your /etc/hosts
 <pre>
@@ -53,17 +54,29 @@ To see all usefull command run:
 
 <pre>
   127.0.0.1 your-host.fr
+  127.0.0.1 pma.your-host.fr
+  127.0.0.1 mailcatcher.your-host.fr
 </pre>
 
-### Run the project
+### Install the project
 <pre>
   make install
 </pre>
 
+### Work with project
+If you have already install the project and you want to switch to another project or stop for today,
+just stop your project:
+<pre>
+  make stop
+</pre>
+And start when you need with:
+<pre>
+  make start
+</pre>
 ## Database management
 We used a dump to reload faster our database. To load your database use:
 <pre>
-  make db-load
+  make db-load-fixtures
 </pre>
 ### Update dump
 If you add some migration or some fixtures, you have to update your dump with:
@@ -71,16 +84,15 @@ If you add some migration or some fixtures, you have to update your dump with:
    make db-reload-fixtures
 </pre>
 ### PhpMyAdmin
-To access PhpMyAdmin use: http://127.0.0.1:8080
+To access PhpMyAdmin use: https://pma.your-host.fr
 
-Login: root
-
-Password: root
+- Login: root
+- Password: root
 
 ## Quality of our code
 We have some quality tools and to run all this tools, you can use:
 <pre>
-  make quality-ci
+  make code-quality
 </pre>
 In our quality tools you can find:
 ### Security checker of symfony
@@ -125,7 +137,7 @@ This Symfony command check if your database schema is coherent with your entitie
 
 ## Mailcatcher
 If your local app send mail, your mail will be catched by the mailcatcher.
-To see this mail go to: http://127.0.0.1:1080
+To see this mail go to: https://mailcatcher.your-host.fr
 
 ## Next step
 If you want to help use, you can add some features like:

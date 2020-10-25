@@ -1,18 +1,24 @@
 version: '3'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./docker/nginx-proxy/cert/:/etc/nginx/certs/
+
   nginx:
     image: nginx:1.19
+    restart: on-failure
     volumes:
       - .:/home/app
       - ./docker/nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
-    ports:
-      - 80:80
     links:
       - php
 
   php:
     build: docker/php
+    restart: on-failure
     working_dir: /home/app
     volumes:
       - .:/home/app
@@ -20,7 +26,7 @@ services:
   db:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: on-failure
     volumes:
       - .:/home/app
     environment:
@@ -31,8 +37,6 @@ services:
       - db
     image: phpmyadmin/phpmyadmin
     restart: always
-    ports:
-      - '8080:80'
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
@@ -42,9 +46,8 @@ services:
 
   smtp:
     image: schickling/mailcatcher
-    ports:
-      - '1080:1080'
-      - '1025:1025'
+    environment:
+      VIRTUAL_PORT: 1080
 
   quality-assurance:
     build: docker/quality-assurance
