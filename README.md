@@ -113,6 +113,18 @@ This tools allows you to check if you have unused dependencies
 <pre>
   make yaml-linter
 </pre>
+### Xliff Linter
+<pre>
+  make xliff-linter
+</pre>
+### Twig Linter
+<pre>
+  make twig-linter
+</pre>
+### Container Linter
+<pre>
+  make container-linter
+</pre>
 ### PHPStan
 <pre>
   make phpstan

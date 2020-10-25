@@ -105,7 +105,7 @@ behat: db-load-fixtures ##Launch behat
 	@$(EXEC_PHP) vendor/bin/behat --strict --format=progress --tags="~@read-only"
 
 ##Quality assurance
-code-quality: security-checker phpmd composer-unused yaml-linter phpstan cs db-validate ##Launch all quality assurance step
+code-quality: security-checker phpmd composer-unused yaml-linter xliff-linter twig-linter container-linter phpstan cs db-validate ##Launch all quality assurance step
 security-checker: ##Security check on dependencies
 	@echo "\nRunning security checker...\e[0m"
 	@$(QUALITY_ASSURANCE) sh -c "security-checker security:check"
@@ -116,11 +116,23 @@ phpmd: ##Phpmd
 
 composer-unused: ##Check if you have unused dependencies
 	@echo "\nRunning composer unused...\e[0m"
-	@$(QUALITY_ASSURANCE) composer-unused
+	@$(QUALITY_ASSURANCE) composer-unused || true
 
 yaml-linter: ##Linter yaml
 	@echo "\nRunning yaml linter...\e[0m"
 	@$(QUALITY_ASSURANCE) yaml-linter . --format=json
+
+xliff-linter: ##Linter xliff
+	@echo "\nRunning xliff linter...\e[0m"
+	@$(EXEC_SYMFONY) lint:xliff translations/
+
+twig-linter: ##Linter twig
+	@echo "\nRunning twig linter...\e[0m"
+	@$(EXEC_SYMFONY) lint:twig templates/
+
+container-linter: ##Container yaml
+	@echo "\nRunning container linter...\e[0m"
+	@$(EXEC_SYMFONY) lint:container
 
 phpstan: ##PHPStan with higher level
 	@echo "\nRunning phpstan...\e[0m"
