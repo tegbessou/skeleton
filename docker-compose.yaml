@@ -1,14 +1,19 @@
 version: '3'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   nginx:
     image: nginx:1.19
     restart: on-failure
     volumes:
       - .:/home/app
       - ./docker/nginx/conf/site.conf:/etc/nginx/conf.d/site.conf
-    ports:
-      - 80:80
     links:
       - php
 
@@ -33,8 +38,6 @@ services:
       - db
     image: phpmyadmin/phpmyadmin
     restart: always
-    ports:
-      - '8080:80'
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
@@ -44,9 +47,8 @@ services:
 
   smtp:
     image: schickling/mailcatcher
-    ports:
-      - '1080:1080'
-      - '1025:1025'
+    environment:
+      VIRTUAL_PORT: 1080
 
   quality-assurance:
     build: docker/quality-assurance

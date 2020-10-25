@@ -40,11 +40,12 @@ To see all usefull command run:
 ## How to start with Skeleton ?
 ### First replace "skeleton" occurence with your project name
 - Change all occurences of "skeleton" in Makefile
-- Change host "skeleton.fr" in site.conf
+- Change host "skeleton.docker" in site.conf
 - Change "skeleton" in .bashrc
-- Change base url "https://skeleton.fr" in behat.yml
+- Change base url "https://skeleton.docker" in behat.yml.dist
 - Change database name "skeleton" in .env
 - Change dump name "skeleton.sql" in FixtureContext
+- Change urls which finish with "skeleton.docker" in docker-compose.override.yaml.dist
 
 ### Add host in your /etc/hosts
 <pre>
@@ -53,6 +54,8 @@ To see all usefull command run:
 
 <pre>
   127.0.0.1 your-host.fr
+  127.0.0.1 pma.your-host.fr
+  127.0.0.1 mailcatcher.your-host.fr
 </pre>
 
 ### Install the project
@@ -81,11 +84,10 @@ If you add some migration or some fixtures, you have to update your dump with:
    make db-reload-fixtures
 </pre>
 ### PhpMyAdmin
-To access PhpMyAdmin use: http://127.0.0.1:8080
+To access PhpMyAdmin use: http://pma.your-host.fr
 
-Login: root
-
-Password: root
+- Login: root
+- Password: root
 
 ## Quality of our code
 We have some quality tools and to run all this tools, you can use:
@@ -135,7 +137,7 @@ This Symfony command check if your database schema is coherent with your entitie
 
 ## Mailcatcher
 If your local app send mail, your mail will be catched by the mailcatcher.
-To see this mail go to: http://127.0.0.1:1080
+To see this mail go to: http://mailcatcher.your-host.fr
 
 ## Next step
 If you want to help use, you can add some features like:

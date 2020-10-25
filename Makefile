@@ -10,23 +10,28 @@ COMPOSER = $(EXEC_PHP) composer
 help: ##Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
+docker-compose.override.yaml:
+	@cp docker-compose.override.yaml.dist docker-compose.override.yaml
+
+.PHONY: docker-compose.override.yaml
+
 ##Docker
-pull:
+pull: docker-compose.override.yaml
 	@echo "\nPulling local images...\e[0m"
 	@$(DOCKER_COMPOSE) pull --quiet
 
-build: ##Build docker
+build: docker-compose.override.yaml pull ##Build docker
 	@echo "\nBuilding local images...\e[0m"
 	@$(DOCKER_COMPOSE) build
 
-up: ##Up docker
+up: docker-compose.override.yaml ##Up docker
 	@$(DOCKER_COMPOSE) up -d --remove-orphans
 
-down: ##Down docker
+down: docker-compose.override.yaml ##Down docker
 	@$(DOCKER_COMPOSE) kill
 	@$(DOCKER_COMPOSE) down --remove-orphans
 
-logs: ##Logs from docker
+logs: docker-compose.override.yaml ##Logs from docker
 	@${DOCKER_COMPOSE} logs -f --tail 0
 
 .PHONY: pull build up down logs
@@ -36,11 +41,11 @@ install: build up vendor db-load-fixtures ##Up the project and load database
 
 reset: down build up db-load-fixtures ##Reset the project
 
-start: ## Start containers (unpause)
+start: docker-compose.override.yaml ## Start containers (unpause)
 	@$(DOCKER_COMPOSE) unpause || true
 	@$(DOCKER_COMPOSE) start || true
 
-stop: ##Stop containers (pause)
+stop: docker-compose.override.yaml ##Stop containers (pause)
 	@$(DOCKER_COMPOSE) pause || true
 
 vendor: composer.lock ##Install composer

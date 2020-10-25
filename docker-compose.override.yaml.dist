@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    ports:
+      - "80:80"
+
+  nginx:
+    environment:
+      VIRTUAL_HOST: skeleton.docker
+
+  phpmyadmin:
+    environment:
+      VIRTUAL_HOST: pma.skeleton.docker
+
+  smtp:
+    environment:
+      VIRTUAL_HOST: mailcatcher.skeleton.docker
