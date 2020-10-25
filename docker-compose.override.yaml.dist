@@ -4,15 +4,19 @@ services:
   nginx-proxy:
     ports:
       - "80:80"
+      - "443:443"
 
   nginx:
     environment:
       VIRTUAL_HOST: skeleton.docker
+      CERT_NAME: default
 
   phpmyadmin:
     environment:
       VIRTUAL_HOST: pma.skeleton.docker
+      CERT_NAME: default
 
   smtp:
     environment:
       VIRTUAL_HOST: mailcatcher.skeleton.docker
+      CERT_NAME: default

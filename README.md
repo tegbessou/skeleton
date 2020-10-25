@@ -84,7 +84,7 @@ If you add some migration or some fixtures, you have to update your dump with:
    make db-reload-fixtures
 </pre>
 ### PhpMyAdmin
-To access PhpMyAdmin use: http://pma.your-host.fr
+To access PhpMyAdmin use: https://pma.your-host.fr
 
 - Login: root
 - Password: root
@@ -137,7 +137,7 @@ This Symfony command check if your database schema is coherent with your entitie
 
 ## Mailcatcher
 If your local app send mail, your mail will be catched by the mailcatcher.
-To see this mail go to: http://mailcatcher.your-host.fr
+To see this mail go to: https://mailcatcher.your-host.fr
 
 ## Next step
 If you want to help use, you can add some features like:

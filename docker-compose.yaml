@@ -3,10 +3,9 @@ version: '3'
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
-    ports:
-      - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./docker/nginx-proxy/cert/:/etc/nginx/certs/
 
   nginx:
     image: nginx:1.19
