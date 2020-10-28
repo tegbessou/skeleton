@@ -14,5 +14,4 @@ jobs:
         run: make install
 
       - name: Run quality code
-        run: |
-          make quality-code
+        run: make quality-code
