@@ -3,6 +3,7 @@ default:
         default:
             contexts:
                 - App\Tests\Behat\FixtureContext
+                - App\Tests\Behat\ErrorHandlerContext
                 - Behat\MinkExtension\Context\MinkContext
 
     extensions:
