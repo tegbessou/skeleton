@@ -1,5 +1,6 @@
 DOCKER_COMPOSE = docker-compose
 EXEC_PHP = $(DOCKER_COMPOSE) exec -T -u www-data php
+EXEC_YARN = $(DOCKER_COMPOSE) exec -T -u www-data php yarn
 EXEC_SYMFONY = $(DOCKER_COMPOSE) exec -T -u www-data php bin/console
 EXEC_DB = $(DOCKER_COMPOSE) exec -T db sh -c
 QUALITY_ASSURANCE = $(DOCKER_COMPOSE) run --rm quality-assurance
@@ -54,10 +55,10 @@ logs: docker-compose.override.yaml ##Logs from docker
 Project:
 
 ## Up the project and load database
-install: build up vendor db-load-fixtures
+install: build up vendor node-modules db-load-fixtures
 
 ## Reset the project
-reset: down build up db-load-fixtures
+reset: down install
 
 ## Start containers (unpause)
 start: docker-compose.override.yaml
@@ -72,6 +73,11 @@ stop: docker-compose.override.yaml
 vendor: composer.lock
 	@echo "\nInstalling composer packages...\e[0m"
 	@$(COMPOSER) install
+
+##Install yarn
+node-modules: package.json
+	@echo "\nInstalling yarn packages...\e[0m"
+	@$(EXEC_YARN) install
 
 ## Update composer
 composer-update: composer.json
@@ -88,7 +94,11 @@ wait-db:
 	@echo "\nWaiting for DB...\e[0m"
 	@$(EXEC_PHP) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',3306))die;echo \"\";sleep(1);}"
 
-.PHONY: install reset start stop vendor composer-update cc wait-db
+##
+watch:
+	@$(EXEC_YARN) encore dev --watch
+
+.PHONY: install reset start stop vendor composer-update cc wait-db node-modules
 
 #################################
 Database:
@@ -133,11 +143,11 @@ Test:
 
 ## Launch unit test
 unit-test:
-	@echo "\nLaunching unit tests"
+	@echo "\nLaunching unit tests\e[0m"
 	@$(EXEC_PHP) bin/phpunit
 
 ## Launch behat
-behat: db-load-fixtures
+behat: vendor node-modules db-load-fixtures
 	@echo "\nLaunching read-only behat tests...\e[0m"
 	@$(EXEC_PHP) vendor/bin/behat --strict --format=progress --tags="@read-only"
 
@@ -150,7 +160,7 @@ behat: db-load-fixtures
 Quality assurance:
 
 ## Launch all quality assurance step
-code-quality: security-checker phpmd composer-unused yaml-linter xliff-linter twig-linter container-linter phpstan cs db-validate
+code-quality: security-checker phpmd composer-unused yaml-linter xliff-linter twig-linter container-linter phpstan cs eslint db-validate
 
 ## Security check on dependencies
 security-checker:
@@ -170,7 +180,7 @@ composer-unused:
 ## Linter yaml
 yaml-linter:
 	@echo "\nRunning yaml linter...\e[0m"
-	@$(QUALITY_ASSURANCE) yaml-linter . --format=json
+	@$(QUALITY_ASSURANCE) yaml-linter src/ config/ fixtures/ docker* --format=json
 
 ## Linter xliff
 xliff-linter:
@@ -202,7 +212,13 @@ cs-fix:
 	@echo "\nRunning cs fixer...\e[0m"
 	@$(QUALITY_ASSURANCE) php-cs-fixer fix --using-cache=no --verbose --diff
 
+eslint: node-modules
+	@echo "\nRunning eslint\e[0m"
+	@$(EXEC_YARN) run eslint assets/
+
 ## Validate db schema
 db-validate:
 	@echo "\nRunning db validate...\e[0m"
 	@$(EXEC_SYMFONY) doctrine:schema:validate
+
+.PHONY: eslint

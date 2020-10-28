@@ -12,4 +12,4 @@ Feature:
   @read-only @javascript
   Scenario: As a User I want to see the home page with a javascript test
     Given I go to "/"
-    Then the response should contain "Bienvenue sur le squelette!"
+    Then the response should contain "Bienvenue sur le squelette via JS!"

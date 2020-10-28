@@ -28,7 +28,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist
+        run: make vendor
 
       - name: Code quality
         run: make code-quality
@@ -60,7 +60,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist
+        run: make vendor
 
       - name: Unit test
         run: make unit-test

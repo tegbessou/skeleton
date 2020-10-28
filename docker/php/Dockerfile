@@ -5,7 +5,8 @@ RUN apk update \
     bash \
     git \
     zip \
-    unzip
+    unzip \
+    nodejs
 
 # PHP extensions
 RUN docker-php-ext-install opcache pdo_mysql mysqli
@@ -24,6 +25,14 @@ RUN apk add --update icu-dev \
 
 # Install composer
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Install yarn
+ADD https://yarnpkg.com/latest.tar.gz /opt/yarn.tar.gz
+RUN cd /opt \
+    && mkdir yarn \
+    && tar xzf yarn.tar.gz -C yarn --strip-components 1 \
+    && cd /usr/local/bin \
+    && ln -s /opt/yarn/bin/yarn
 
 # Upgrade bash configuration
 COPY .bashrc /home/www-data/.bashrc
