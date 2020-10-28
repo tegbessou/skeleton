@@ -22,8 +22,8 @@ jobs:
       - name: Yaml linter
         run: make yaml-linter
 
-      - name: Phpstan
-        run: make phpstan
+#      - name: Phpstan
+#        run: make phpstan
 
       - name: Php code sniffer
         run: make cs
