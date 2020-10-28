@@ -18,7 +18,9 @@ services:
     links:
       - php
     networks:
-      - web
+      web:
+        aliases:
+          - bo.meyclub.docker
 
   php:
     build: docker/php
