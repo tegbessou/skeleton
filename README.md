@@ -46,6 +46,7 @@ To see all usefull command run:
 - Change base url "https://skeleton.docker" in behat.yml.dist
 - Change database name "skeleton" in .env
 - Change dump name "skeleton.sql" in FixtureContext
+- Change local domain "https://skeleton.docker" in ErrorHandlerContext.php
 - Change urls which finish with "skeleton.docker" in docker-compose.override.yaml.dist
 
 ### Add host in your /etc/hosts
