@@ -65,5 +65,5 @@ jobs:
       - name: Unit test
         run: make unit-test
 
-      - name: Behat test
-        run: make behat
+#      - name: Behat test
+#        run: make behat
