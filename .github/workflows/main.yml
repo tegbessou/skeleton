@@ -39,6 +39,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup docker override
+        run: make docker-compose.override.yaml
+
       - name: Up needed docker
         run: docker-compose up -d nginx-proxy nginx redis php db selenium
 
