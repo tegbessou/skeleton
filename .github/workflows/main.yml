@@ -10,8 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install project
-        run: make install
-
-      - name: Run quality code
-        run: make quality-code
+      - name: Security checker
+        run: security-checker
