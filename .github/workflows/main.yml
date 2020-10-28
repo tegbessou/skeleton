@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Up php & mysql
-        run: docker-compose up -d php mysql
+        run: docker-compose up -d php db
 
       - name: Load database
         run: make db-load-fixtures
