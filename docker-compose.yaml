@@ -18,7 +18,9 @@ services:
     links:
       - php
     networks:
-      - web
+      web:
+        aliases:
+          - skeleton.docker
 
   php:
     build: docker/php
