@@ -10,24 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Security checker
-        run: make security-checker
-
-      - name: Phpmd
-        run: make security-checker
-
-      - name: Composer unused
-        run: make composer-unused
-
-      - name: Yaml linter
-        run: make yaml-linter
-
-#      - name: Phpstan
-#        run: make phpstan
-
-      - name: Php code sniffer
-        run: make cs
-
       - name: Up php
         run: docker-compose up -d php
 
@@ -46,4 +28,4 @@ jobs:
         run: composer install --prefer-dist
 
       - name: Xliff linter
-        run: make xliff-linter
+        run: make code-quality
