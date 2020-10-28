@@ -20,7 +20,7 @@ services:
     networks:
       web:
         aliases:
-          - bo.meyclub.docker
+          - skeleton.docker
 
   php:
     build: docker/php
