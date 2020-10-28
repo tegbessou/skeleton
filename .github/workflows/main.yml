@@ -10,8 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Up php
-        run: docker-compose up -d php
+      - name: Up php & mysql
+        run: docker-compose up -d php mysql
+
+      - name: Load database
+        run: make db-load-fixtures
 
       - name: Get composer cache directory
         id: composercache
@@ -27,5 +30,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist
 
-      - name: Xliff linter
+      - name: Code quality
         run: make code-quality
