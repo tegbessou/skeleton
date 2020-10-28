@@ -12,3 +12,38 @@ jobs:
 
       - name: Security checker
         run: make security-checker
+
+      - name: Phpmd
+        run: make security-checker
+
+      - name: Composer unused
+        run: make composer-unused
+
+      - name: Yaml linter
+        run: make yaml-linter
+
+      - name: Phpstan
+        run: make phpstan
+
+      - name: Php code sniffer
+        run: make cs
+
+      - name: Up php
+        run: docker-compose up -d php
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist
+
+      - name: Xliff linter
+        run: make xliff-linter
