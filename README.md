@@ -48,6 +48,7 @@ To see all usefull command run:
 - Change dump name "skeleton.sql" in FixtureContext
 - Change local domain "https://skeleton.docker" in ErrorHandlerContext.php
 - Change urls which finish with "skeleton.docker" in docker-compose.override.yaml.dist
+- Change urls which finish with "skeleton.docker" in docker-compose.yaml
 
 ### Add host in your /etc/hosts
 <pre>
