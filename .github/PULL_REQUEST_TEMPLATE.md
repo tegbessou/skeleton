@@ -2,8 +2,8 @@
 | Q             | A
 | ------------- | ---
 | Bug fix?      | yes/no
-| New feature?  | yes/no <!-- please update src/**/CHANGELOG.md files -->
-| Deprecations? | yes/no <!-- please update UPGRADE-*.md and src/**/CHANGELOG.md files -->
+| New feature?  | yes/no
+| Deprecations? | yes/no
 
 ## Description
 <!--- Describe your changes in detail -->
