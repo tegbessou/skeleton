@@ -1,7 +1,7 @@
 # Skeleton
 ![CI](https://github.com/tegbessou/skeleton/workflows/CI/badge.svg)
 ## Description
-A skeleton of application, which can be used if you have to satrt a new project with Symfony, Ningx, PHP and Mysql.
+A skeleton of application, which can be used if you have to start a new project with Symfony, Ningx, PHP and Mysql.
 
 ## Purpose
 This skeleton will be used on new and actual projects in our organization
