@@ -18,7 +18,7 @@ In our skeleton we want a stack which is capable to run a Symfony application
 - PhpMyAdmin
 
 ### Symfony
-Version 5.1
+Version 5.2
 
 ### Functionnal Test
 We use Behat. To run behat use:
@@ -159,7 +159,6 @@ To see this mail go to: https://mailcatcher.your-host.fr
 If you want to help use, you can add some features like:
 - A gitlab-ci.yaml example
 - Add a docker image for S3 storage and some test
-- Upgrade symfony version to 5.2
 - Add Mac support
 
 This are idea, but feel free to suggest any features you want!!
