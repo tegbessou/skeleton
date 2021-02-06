@@ -169,7 +169,7 @@ code-quality: security-checker phpmd composer-unused yaml-linter xliff-linter tw
 ## Security check on dependencies
 security-checker:
 	@echo "\nRunning security checker...\e[0m"
-	@$(QUALITY_ASSURANCE) sh -c "security-checker security:check"
+	@$(EXEC_PHP) sh -c "local-php-security-checker"
 
 ## Phpmd
 phpmd:
