@@ -25,6 +25,8 @@ RUN apk add --update icu-dev \
 
 # Install composer
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN wget -O /usr/local/bin/local-php-security-checker "https://github.com/fabpot/local-php-security-checker/releases/download/v1.0.0/local-php-security-checker_1.0.0_linux_amd64"
+RUN chmod +x /usr/local/bin/local-php-security-checker
 
 # Install yarn
 ADD https://yarnpkg.com/latest.tar.gz /opt/yarn.tar.gz
