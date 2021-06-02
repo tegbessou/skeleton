@@ -10,7 +10,7 @@ services:
       - web
 
   nginx:
-    image: nginx:1.19
+    image: nginx:1.21
     restart: on-failure
     volumes:
       - .:/home/app
@@ -52,7 +52,7 @@ services:
       - web
 
   redis:
-    image: redis:6.0-alpine
+    image: redis:6.2-alpine
     networks:
       - web
 
