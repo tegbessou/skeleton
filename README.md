@@ -18,7 +18,7 @@ In our skeleton we want a stack which is capable to run a Symfony application
 - PhpMyAdmin
 
 ### Symfony
-Version 5.2
+Version 5.3
 
 ### Functionnal Test
 We use Behat. To run behat use:
@@ -57,9 +57,9 @@ To see all usefull command run:
 </pre>
 
 <pre>
-  127.0.0.1 your-host.fr
-  127.0.0.1 pma.your-host.fr
-  127.0.0.1 mailcatcher.your-host.fr
+  127.0.0.1 your-host.docker
+  127.0.0.1 pma.your-host.docker
+  127.0.0.1 mailcatcher.your-host.docker
 </pre>
 
 ### Install the project
@@ -88,7 +88,7 @@ If you add some migration or some fixtures, you have to update your dump with:
    make db-reload-fixtures
 </pre>
 ### PhpMyAdmin
-To access PhpMyAdmin use: https://pma.your-host.fr
+To access PhpMyAdmin use: https://pma.your-host.docker
 
 - Login: root
 - Password: root
@@ -153,7 +153,7 @@ This Symfony command check if your database schema is coherent with your entitie
 
 ## Mailcatcher
 If your local app send mail, your mail will be catched by the mailcatcher.
-To see this mail go to: https://mailcatcher.your-host.fr
+To see this mail go to: https://mailcatcher.your-host.docker
 
 ## Next step
 If you want to help use, you can add some features like:
