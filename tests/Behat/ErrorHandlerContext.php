@@ -14,23 +14,15 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ErrorHandlerContext extends RawMinkContext
 {
-    const LOCAL_DOMAIN = 'https://skeleton.docker';
+    public const LOCAL_DOMAIN = 'https://skeleton.docker';
 
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-
-    /** @var string Scenario Information for error output */
     private $scenarioData;
 
-    /** @var string The local domain for viewing screenshot errors */
-    private $localDomain;
-
-    public function __construct(KernelInterface $kernel)
-    {
+    public function __construct(
+        private KernelInterface $kernel,
+        private string $localDomain = self::LOCAL_DOMAIN
+    ) {
         $this->localDomain = self::LOCAL_DOMAIN;
-        $this->kernel = $kernel;
     }
 
     /**

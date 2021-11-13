@@ -3,7 +3,6 @@ EXEC_PHP = $(DOCKER_COMPOSE) exec -T -u www-data php
 EXEC_YARN = $(DOCKER_COMPOSE) exec -T -u www-data php yarn
 EXEC_SYMFONY = $(DOCKER_COMPOSE) exec -T -u www-data php bin/console
 EXEC_DB = $(DOCKER_COMPOSE) exec -T db sh -c
-QUALITY_ASSURANCE = $(DOCKER_COMPOSE) run --rm quality-assurance
 COMPOSER = $(EXEC_PHP) composer
 
 .DEFAULT_GOAL := help
@@ -164,7 +163,7 @@ behat: vendor node-modules db-load-fixtures
 Quality assurance:
 
 ## Launch all quality assurance step
-code-quality: security-checker phpmd composer-unused yaml-linter xliff-linter twig-linter container-linter phpstan cs eslint db-validate
+code-quality: security-checker composer-unused yaml-linter xliff-linter twig-linter container-linter phpstan cs eslint db-validate
 
 ## Security check on dependencies
 security-checker:
@@ -174,17 +173,17 @@ security-checker:
 ## Phpmd
 phpmd:
 	@echo "\nRunning phpmd...\e[0m"
-	@$(QUALITY_ASSURANCE) phpmd src/ text .phpmd.xml
+	@$(EXEC_PHP) phpmd src/ text .phpmd.xml
 
 ## Check if you have unused dependencies
 composer-unused:
 	@echo "\nRunning composer unused...\e[0m"
-	@$(QUALITY_ASSURANCE) composer-unused || true
+	@$(EXEC_PHP) composer-unused || true
 
 ## Linter yaml
 yaml-linter:
 	@echo "\nRunning yaml linter...\e[0m"
-	@$(QUALITY_ASSURANCE) yaml-linter src/ config/ fixtures/ docker* --format=json
+	@$(EXEC_SYMFONY) lint:yaml src/ config/ fixtures/ docker*
 
 ## Linter xliff
 xliff-linter:
@@ -204,17 +203,17 @@ container-linter:
 ## PHPStan with higher level
 phpstan:
 	@echo "\nRunning phpstan...\e[0m"
-	@$(QUALITY_ASSURANCE) phpstan analyse src/ --level 8
+	@$(EXEC_PHP) phpstan analyse src/ --level 8
 
 ## Show cs fixer error
 cs:
 	@echo "\nRunning cs fixer in dry run...\e[0m"
-	@$(QUALITY_ASSURANCE) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff
+	@$(EXEC_PHP) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
 
 ## Fix cs fixer error
 cs-fix:
 	@echo "\nRunning cs fixer...\e[0m"
-	@$(QUALITY_ASSURANCE) php-cs-fixer fix --using-cache=no --verbose --diff
+	@$(EXEC_PHP) php-cs-fixer fix --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
 
 eslint: node-modules
 	@echo "\nRunning eslint\e[0m"

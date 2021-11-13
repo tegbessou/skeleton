@@ -1,13 +1,13 @@
 FROM php:8.0-fpm-alpine
 
-
 RUN apk update \
  && apk add --no-cache $PHPIZE_DEPS \
     bash \
     git \
     zip \
     unzip \
-    nodejs
+    nodejs \
+    python2
 
 # PHP extensions
 RUN docker-php-ext-install opcache pdo_mysql mysqli
@@ -39,6 +39,25 @@ RUN cd /opt \
 
 # Upgrade bash configuration
 COPY .bashrc /home/www-data/.bashrc
+# Install php cs fixer, phpmd, phpstan and composer unused
+RUN set -xe; \
+    mkdir -p /usr/local/src; \
+    cd /usr/local/src; \
+    composer require --optimize-autoloader \
+        bamarni/composer-bin-plugin; \
+    composer bin phpstan require --optimize-autoloader \
+            phpstan/phpstan \
+            phpstan/phpstan-dibi \
+            phpstan/phpstan-doctrine \
+            phpstan/phpstan-phpunit \
+            phpstan/phpstan-strict-rules; \
+    composer bin symfony-friendly require --optimize-autoloader \
+        friendsofphp/php-cs-fixer \
+        phpmd/phpmd; \
+    composer bin composer-unused require --optimize-autoloader \
+        icanhazstring/composer-unused;
+
+ENV PATH /usr/local/src/vendor/bin:$PATH
 
 #######################
 # Override the image  #

@@ -10,10 +10,9 @@ In our skeleton we want a stack which is capable to run a Symfony application
 ## What is in Skeleton ?
 ### Docker
 - Nginx: 1.19
-- PHP: 7.4
-- Mysql: 8.0
-- QualityAssurance: 7.4
-- Redis: 6.0
+- PHP: 8.0
+- Mariadb: 10.7
+- Redis: 6.2
 - Mailcatcher
 - PhpMyAdmin
 
