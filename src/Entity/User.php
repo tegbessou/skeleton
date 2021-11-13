@@ -4,31 +4,21 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class User
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(name="id", type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id', type:'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="email", type="string")
-     */
+    #[ORM\Column(name: 'email', type: 'string')]
     private string $email;
 
-    /**
-     * @ORM\Column(name="roles", type="array")
-     */
+    #[ORM\Column(name: 'roles', type: 'array')]
     private array $roles;
 
-    /**
-     * @ORM\Column(name="password")
-     */
+    #[ORM\Column(name: 'password')]
     private string $password;
 
     public function getId(): ?int
