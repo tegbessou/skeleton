@@ -30,7 +30,7 @@ services:
       - web
 
   db:
-    image: mysql:8.0
+    image: mariadb:10.7
     command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
     volumes:
@@ -69,11 +69,6 @@ services:
       - web
     external_links:
       - nginx-proxy:skeleton.docker
-
-  quality-assurance:
-    build: docker/quality-assurance
-    volumes:
-      - .:/project
 
 networks:
     web:

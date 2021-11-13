@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ErrorHandlerContext extends RawMinkContext
 {
-    const LOCAL_DOMAIN = 'https://skeleton.docker';
+    public const LOCAL_DOMAIN = 'https://skeleton.docker';
 
     /**
      * @var KernelInterface

@@ -14,7 +14,7 @@ class User
      * @ORM\GeneratedValue
      * @ORM\Column(name="id", type="integer")
      */
-    private int $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(name="email", type="string")
@@ -31,7 +31,7 @@ class User
      */
     private string $password;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
