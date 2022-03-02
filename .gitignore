@@ -2,6 +2,9 @@
 /docker-compose.override.yaml
 ### PHPStorm
 /.idea
+### MAC
+/.DS_Store
+/*/.DS_Store
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

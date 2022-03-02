@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.7.1-MariaDB, for debian-linux-gnu (aarch64)
+-- MariaDB dump 10.19  Distrib 10.7.3-MariaDB, for debian-linux-gnu (aarch64)
 --
 -- Host: localhost    Database: skeleton
 -- ------------------------------------------------------
--- Server version	10.7.1-MariaDB-1:10.7.1+maria~focal
+-- Server version	10.7.3-MariaDB-1:10.7.3+maria~focal
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -45,7 +45,7 @@ CREATE TABLE `doctrine_migration_versions` (
 LOCK TABLES `doctrine_migration_versions` WRITE;
 /*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
 INSERT INTO `doctrine_migration_versions` VALUES
-('DoctrineMigrations\\Version20201020095646','2021-11-13 12:00:04',70);
+('DoctrineMigrations\\Version20201020095646','2022-03-02 09:46:42',90);
 /*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-13 12:00:07
+-- Dump completed on 2022-03-02  9:46:44
