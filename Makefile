@@ -94,7 +94,7 @@ wait-db:
 	@$(EXEC_PHP) php -r "set_time_limit(60);for(;;){if(@fsockopen('db',3306))die;echo \"\";sleep(1);}"
 
 ## Watch assets and do live reload
-watch:
+watch: node-modules
 	@$(EXEC_YARN) encore dev --watch
 
 ## Build assets in dev env
