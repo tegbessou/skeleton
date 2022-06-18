@@ -1,7 +1,8 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -211,7 +212,6 @@ module.exports = {
         "require-atomic-updates": "error",
         "require-await": "error",
         "require-jsdoc": "error",
-        "require-unicode-regexp": "error",
         "rest-spread-spacing": "error",
         "semi": "error",
         "semi-spacing": "error",

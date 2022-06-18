@@ -4,6 +4,7 @@
         "@symfony/stimulus-bridge": "^3.0.0",
         "@symfony/webpack-encore": "^2.0.0",
         "core-js": "^3.0.0",
+        "eslint": "^8.18.0",
         "regenerator-runtime": "^0.13.2",
         "sass": "^1.52.3",
         "sass-loader": "^12.0.0",
