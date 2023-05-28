@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 RUN apk update \
  && apk add --no-cache $PHPIZE_DEPS \
@@ -39,24 +39,6 @@ RUN cd /opt \
 
 # Upgrade bash configuration
 COPY .bashrc /home/www-data/.bashrc
-# Install php cs fixer, phpmd, phpstan and composer unused
-RUN set -xe; \
-    mkdir -p /usr/local/src; \
-    cd /usr/local/src; \
-    composer require --optimize-autoloader \
-        bamarni/composer-bin-plugin; \
-    composer bin phpstan require --optimize-autoloader \
-            phpstan/phpstan \
-            phpstan/phpstan-dibi \
-            phpstan/phpstan-doctrine \
-            phpstan/phpstan-phpunit \
-            phpstan/phpstan-strict-rules; \
-    composer bin symfony-friendly require --optimize-autoloader \
-        friendsofphp/php-cs-fixer; \
-    composer bin phpmd require --optimize-autoloader \
-        phpmd/phpmd; \
-    composer bin composer-unused require --optimize-autoloader \
-        icanhazstring/composer-unused;
 
 ENV PATH /usr/local/src/vendor/bin:$PATH
 
