@@ -1,6 +1,6 @@
-DOCKER_COMPOSE = docker-compose
-EXEC_PHP = $(DOCKER_COMPOSE) exec -T -u www-data php
-EXEC_YARN = $(DOCKER_COMPOSE) exec -T -u www-data php yarn
+DOCKER_COMPOSE = docker compose
+EXEC_PHP = $(DOCKER_COMPOSE) exec -T -u www-data -e PHP_CS_FIXER_IGNORE_ENV=1 php
+EXEC_YARN = $(DOCKER_COMPOSE) exec -T -u www-data php yarn --cache-folder=/home/app
 EXEC_SYMFONY = $(DOCKER_COMPOSE) exec -T -u www-data php bin/console
 EXEC_DB = $(DOCKER_COMPOSE) exec -T db sh -c
 COMPOSER = $(EXEC_PHP) composer
@@ -173,12 +173,12 @@ security-checker:
 ## Phpmd
 phpmd:
 	@echo "\nRunning phpmd...\e[0m"
-	@$(EXEC_PHP) phpmd src/ text .phpmd.xml
+	@$(EXEC_PHP) vendor/bin/phpmd src/ text .phpmd.xml
 
 ## Check if you have unused dependencies
 composer-unused:
 	@echo "\nRunning composer unused...\e[0m"
-	@$(EXEC_PHP) composer-unused || true
+	@$(EXEC_PHP) vendor/bin/composer-unused || true
 
 ## Linter yaml
 yaml-linter:
@@ -203,17 +203,17 @@ container-linter:
 ## PHPStan with higher level
 phpstan:
 	@echo "\nRunning phpstan...\e[0m"
-	@$(EXEC_PHP) phpstan analyse src/ --level 8
+	@$(EXEC_PHP) vendor/bin/phpstan analyse src/ --level 8
 
 ## Show cs fixer error
 cs:
 	@echo "\nRunning cs fixer in dry run...\e[0m"
-	@$(EXEC_PHP) php-cs-fixer fix --dry-run --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
+	@$(EXEC_PHP) vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
 
 ## Fix cs fixer error
 cs-fix:
 	@echo "\nRunning cs fixer...\e[0m"
-	@$(EXEC_PHP) php-cs-fixer fix --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
+	@$(EXEC_PHP) vendor/bin/php-cs-fixer fix --using-cache=no --verbose --diff --config=php-cs-fixer.dist.php
 
 eslint: node-modules
 	@echo "\nRunning eslint\e[0m"

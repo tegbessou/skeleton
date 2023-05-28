@@ -10,7 +10,7 @@ services:
       - web
 
   nginx:
-    image: nginx:1.21
+    image: nginx:1.25
     restart: on-failure
     volumes:
       - .:/home/app
@@ -30,7 +30,7 @@ services:
       - web
 
   db:
-    image: mariadb:10.7
+    image: mariadb:10.11
     command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
     volumes:
@@ -52,7 +52,7 @@ services:
       - web
 
   redis:
-    image: redis:6.2-alpine
+    image: redis:7.0-alpine
     networks:
       - web
 
