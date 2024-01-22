@@ -52,7 +52,7 @@ services:
       - web
 
   redis:
-    image: redis:7.0-alpine
+    image: redis:7.2-alpine
     networks:
       - web
 
