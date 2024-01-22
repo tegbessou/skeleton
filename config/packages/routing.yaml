@@ -1,6 +1,5 @@
 framework:
     router:
-        utf8: true
 
 when@prod:
     framework:

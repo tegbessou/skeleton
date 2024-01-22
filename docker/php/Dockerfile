@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN apk update \
  && apk add --no-cache $PHPIZE_DEPS \
@@ -14,10 +14,10 @@ RUN docker-php-ext-install opcache pdo_mysql mysqli
 RUN docker-php-ext-enable opcache
 
 RUN docker-php-source extract \
-    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/5.3.5RC1.tar.gz \
+    && curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/6.0.2.tar.gz \
     && tar xfz /tmp/redis.tar.gz \
     && rm -r /tmp/redis.tar.gz \
-    && mv phpredis-5.3.5RC1 /usr/src/php/ext/redis \
+    && mv phpredis-6.0.2 /usr/src/php/ext/redis \
     && docker-php-ext-install redis
 
 RUN apk add --update icu-dev \
