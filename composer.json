@@ -46,6 +46,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.14",
+        "behat/mink-browserkit-driver": "^2.2",
         "doctrine/data-fixtures": "^1.7",
         "friends-of-behat/mink-extension": "^2.7",
         "friends-of-behat/page-object-extension": "^0.3",
